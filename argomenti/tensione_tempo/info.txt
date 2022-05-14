@@ -1,0 +1,11 @@
+Formattazione dati (5 colonne):
+1a colonna tempo
+2a colonna V in
+3a colonna Passa alto
+4a colonna Passa basso
+5a colonna V out
+
+Formattazione dati (3 colonne):
+1a colonna tempo
+2a colonna V in
+3a colonna dipende del titolo
