@@ -9,3 +9,5 @@ Formattazione dati (3 colonne):
 1a colonna tempo
 2a colonna V in
 3a colonna dipende del titolo
+
+Importante: non ci deve essere una riga vuota alla fine del file
