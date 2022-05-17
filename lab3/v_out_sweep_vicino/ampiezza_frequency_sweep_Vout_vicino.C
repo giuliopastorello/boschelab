@@ -18,10 +18,23 @@ void analyse()
   /*graph1->SetMarkerStyle(kOpenCircle);
   graph1->SetMarkerSize(1);
   graph1->SetMarkerColor(2);*/
-  graph1->SetLineColor(2);
+  graph1->SetLineColor(5);
   graph1->SetLineWidth(4);
   graph1->SetFillColor(0);
 
+  graph1->Fit("pol2", "C", "SAME", 6650, 7750); //gli ultimi due numeri sono il range (grazie al cazz0)
+  TF1 *fitFunc = graph1->GetFunction("pol2");
+
+  fitFunc->GetChisquare(); 
+  fitFunc->GetNDF(); 
+  fitFunc->GetParameter(0); 
+  fitFunc->GetParError(0);
+  fitFunc->GetParameter(1); 
+  fitFunc->GetParError(1);
+  fitFunc->GetParameter(2); 
+  fitFunc->GetParError(2);
+
   TCanvas *c = new TCanvas("c");
   graph1->Draw("AC");
+  //fitFunc->Draw();
 }
