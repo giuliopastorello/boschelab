@@ -22,7 +22,7 @@ void analyse()
   graph1->SetLineWidth(4);
   graph1->SetFillColor(0);
 
-  graph1->Fit("pol2", "C", "SAME", 6650, 7750); //gli ultimi due numeri sono il range (grazie al cazz0)
+  graph1->Fit("pol2", "C", "SAME", 6700, 7700); //gli ultimi due numeri sono il range (grazie al cazz0)
   TF1 *fitFunc = graph1->GetFunction("pol2");
 
   fitFunc->GetChisquare(); 
