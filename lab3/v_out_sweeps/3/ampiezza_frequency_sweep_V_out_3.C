@@ -40,7 +40,7 @@ void analyse()
   /*graph1->SetMarkerStyle(kOpenCircle);
   graph1->SetMarkerSize(1);
   graph1->SetMarkerColor(2);*/
-  graph1->SetLineColor(2);
+  graph1->SetLineColor(5);
   graph1->SetLineWidth(4);
   graph1->SetFillColor(0);
 
