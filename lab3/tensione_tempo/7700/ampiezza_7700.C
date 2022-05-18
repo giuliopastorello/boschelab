@@ -23,7 +23,7 @@ void setStyle()
 
 void testFunction()
 {
-    TF1 *test = new TF1("test", "[0] * sin([1] * x)", 0.379, 0.38, -2);
+    TF1 *test = new TF1("test", "[0] * sin([1] * x)", 0.379169, 0.379965);
     test->SetParameters(2.43029, 42725.7, -2);
 
     TCanvas *c = new TCanvas("c1");
@@ -42,8 +42,8 @@ void analyse()
   graph1->SetFillColor(0);
   graph1->GetXaxis()->SetRangeUser(0, 0.005);
 
-  TF1 *f = new TF1("f", "[0] * TMath::Sin([1] * x + [2])", 0.3798, 0.38);
-  f->SetParameters(2.5, 6800 * TMath::TwoPi(), 0);
+  TF1 *f = new TF1("f", "[0] * TMath::Sin([1] * x + [2])", 0.379169, 0.379965);
+  f->SetParameters(2.4, 7700 * TMath::TwoPi(), 0);
 
   graph1->Fit("f", "R");
   TF1 *fitFunc = graph1->GetFunction("f");
