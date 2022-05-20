@@ -25,7 +25,7 @@ void computeRMS()
 {
   constexpr int N = 100;
   // ***** CALCOLO DEVIAZIONE STANDARD DEL RUMORE *****
-  TH1D *stdHisto = new TH1D("stdHisto", "Rumore", N, -1.137, -0.865);
+  TH1D *stdHisto = new TH1D("stdHisto", "Rumore", N, -1.243725, -0.884981);
   std::ifstream in;
   in.open("rumore_fase_1000.txt");
   Double_t fase1k;
