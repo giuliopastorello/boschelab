@@ -13,55 +13,69 @@
 #include <iostream>
 #include <math.h>
 
-/*Double_t pol5(Double_t *x, Double_t *par)
+Double_t transferFunc(Double_t *x, Double_t *par)
 {
-  Double_t xx = x[0];
-  Double_t val = par[0] + par[1] * xx + par[2] * TMath::Power(xx, 2.) +
-                par[3] * TMath::Power(xx, 3.) + par[4] * TMath::Power(xx, 4.) + par[5] * TMath::Power(xx, 5.);
+  Double_t w = x[0] * TMath::TwoPi();
+  Double_t wt = w * par[0];
+  Double_t val = 1 / sqrt(1 + 4 * pow(wt, 2.));
   return val; 
-}*/
+}
 
-/*void plotFunc()
+void plotFunc()
 {
-  TF1 *func = new TF1("func", "[0] + [1] * x + [2] * TMath::Power(x, 2.) + [3] * TMath::Power(x, 3.) + [4] * TMath::Power(x, 4.) + [5] * TMath::Power(x,5.)", 6500, 8000);
-  func->SetParameters(-2.86073E16, 1.97458E13, -5.44523E09, 749913, -51.5774, 0.00141728);
-  TCanvas c1 = new TCanvas("c");
+  TF1* func = new TF1("transferFunc", transferFunc, 500, 3E4,1);
+  func->SetParameter(0, 2.12E-5);
+  
+  TCanvas c1 = new TCanvas("c1");
   func->Draw();
-}*/
+}
 
 void analyse()
 {
-  //TF1 *f = new TF1("f", "pol5");
-  //f->SetParameters(1, 1, 1, 1, 1, 1);
+  TF1 *f = new TF1("f", transferFunc, 500, 29849 ,1);
+  f->SetParameter(0, 2.12E-5);
 
-  TGraph *graph1 = new TGraph("frequenza_PB_sweep_1k-30k.txt", "%lg %lg %*lg");
-  graph1->SetTitle("Passa Basso frequency sweep 1k - 30k: ampiezza; frequenza(Hz); ampiezza(V)");
-  /*graph1->SetMarkerStyle(kOpenCircle);
-  graph1->SetMarkerSize(1);
-  graph1->SetMarkerColor(2);*/
-  graph1->SetLineColor(5);
-  graph1->SetLineWidth(4);
-  graph1->SetFillColor(0);
+  TGraph *graph = new TGraph("frequenza_PB_sweep_1k-30k.txt", "%lg %lg %*lg");
+  graph->SetTitle("H_B frequency sweep 1k - 30k: ampiezza; frequenza(Hz); H_B");
+  for (int i = 0; i < 557; ++i) {
+        if (graph->GetPointX(i) < 7200) {
+            Double_t y = graph->GetPointY(i);
+            graph->SetPointY(i, y/(2.49501 - 1.23303E-5 * graph->GetPointX(i)));
+        } else {
+            Double_t y = graph->GetPointY(i);
+            graph->SetPointY(i, y/(2.45428 - 6.50081E-6 * graph->GetPointX(i)));
+        }
+    }
+  /*graph->SetMarkerStyle(kOpenCircle);
+  graph->SetMarkerSize(1);
+  graph->SetMarkerColor(2);*/
+  graph->SetLineColor(5);
+  graph->SetLineWidth(4);
+  graph->SetFillColor(0);
 
-  graph1->Fit("pol5", "C", "SAME", 6500, 8000);
-  TF1 *fitFunc = graph1->GetFunction("pol5");
+  graph->Fit("f", "R");
+  TF1 *fitFunc = graph->GetFunction("f");
 
   fitFunc->GetChisquare(); 
   fitFunc->GetNDF(); 
   fitFunc->GetParameter(0); 
   fitFunc->GetParError(0);
-  fitFunc->GetParameter(1); 
-  fitFunc->GetParError(1);
-  fitFunc->GetParameter(2); 
-  fitFunc->GetParError(2);
-  fitFunc->GetParameter(3); 
-  fitFunc->GetParError(3);
-  fitFunc->GetParameter(4); 
-  fitFunc->GetParError(4);
-  fitFunc->GetParameter(5); 
-  fitFunc->GetParError(5);
+  std::cout << "ampiezze PB:" << '\n';
+  for (int i = 118; i < 136; i++){
+    std::cout << "f = " << graph->GetPointX(i) << " -> ampiezza/V_in = " << graph->GetPointY(i) << '\n';
+  }
+  //fitFunc->GetParameter(1); 
+  //fitFunc->GetParError(1);
+  //fitFunc->GetParameter(2); 
+  //fitFunc->GetParError(2);
+  //fitFunc->GetParameter(3); 
+  //fitFunc->GetParError(3);
+  //fitFunc->GetParameter(4); 
+  //fitFunc->GetParError(4);
+  //fitFunc->GetParameter(5); 
+  //fitFunc->GetParError(5);
 
   TCanvas *c = new TCanvas("c");
-  graph1->Draw("AC");
+  graph->Draw("AC");
   //fitFunc->Draw();
 }   
