@@ -41,31 +41,31 @@ void analyse()
   graph1->SetLineWidth(4);
   graph1->SetFillColor(0);
 
-  //TF1 *f1 = new TF1("f1", "[0] + [1] * x", 0, 7200);
-  //f1->SetParameters(2.5, -0.3);
+  TF1 *f1 = new TF1("f1", "[0] + [1] * x", 1000, 7200);
+  f1->SetParameters(2.5, -0.3);
 
-  TF1 *f2 = new TF1("f2", "[0] + [1] * x", 7200, 20000);
-  f2->SetParameters(-8000, 1, -0.5);
+  //TF1 *f2 = new TF1("f2", "[0] + [1] * x", 7200, 20000);
+  //f2->SetParameters(-8000, 1, -0.5);
 
-  //graph1->Fit("f1", "R");
-  //TF1 *fitFunc1 = graph1->GetFunction("f1");
-//
-  //fitFunc1->GetChisquare(); 
-  //fitFunc1->GetNDF(); 
-  //fitFunc1->GetParameter(0); 
-  //fitFunc1->GetParError(0);
-  //fitFunc1->GetParameter(1); 
-  //fitFunc1->GetParError(1);
+  graph1->Fit("f1", "R");
+  TF1 *fitFunc1 = graph1->GetFunction("f1");
 
-  graph1->Fit("f2", "R");
-  TF1 *fitFunc2 = graph1->GetFunction("f2");
+  fitFunc1->GetChisquare(); 
+  fitFunc1->GetNDF(); 
+  fitFunc1->GetParameter(0); 
+  fitFunc1->GetParError(0);
+  fitFunc1->GetParameter(1); 
+  fitFunc1->GetParError(1);
 
-  fitFunc2->GetChisquare(); 
-  fitFunc2->GetNDF(); 
-  fitFunc2->GetParameter(0); 
-  fitFunc2->GetParError(0);
-  fitFunc2->GetParameter(1); 
-  fitFunc2->GetParError(1);
+  //graph1->Fit("f2", "R");
+  //TF1 *fitFunc2 = graph1->GetFunction("f2");
+
+  //fitFunc2->GetChisquare(); 
+  //fitFunc2->GetNDF(); 
+  //fitFunc2->GetParameter(0); 
+  //fitFunc2->GetParError(0);
+  //fitFunc2->GetParameter(1); 
+  //fitFunc2->GetParError(1);
   //fitFunc2->GetParameter(2); 
   //fitFunc2->GetParError(2);
 
