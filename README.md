@@ -32,9 +32,9 @@ NDf = 11
 
 ### fit locale PB (7000, 7100)
 
-p0 = 0.534372  +/-  0.0386002
-p1 = -2.4338e-05  +/-  5.47516e-06
-ChiQuadro ridotto: 2.25926e-07
+p0 = 0.534372  +/-  0.0386002  
+p1 = -2.4338e-05  +/-  5.47516e-06   
+ChiQuadro ridotto: 2.25926e-07  
 
 ### intersezione rette  
 
