@@ -32,7 +32,8 @@ Double_t computeYerr()
 
 void analyse()
 {
-  TF1 *f = new TF1("f", "pol5", 6800, 7700);
+  //TF1 *f = new TF1("f", "pol5", 6800, 7700, 6);
+  //f->SetParameters(1, 1, 1, 1, 1, 1);
   TGraphErrors *graph = new TGraphErrors("frequenza_PA_sweep_1k-20k.txt", "%lg %lg %*lg");
   graph->SetTitle("H_A frequency sweep 1k - 20k: ampiezza; frequenza(Hz); H_A");
   for (int i = 0; i < 572; ++i) {
@@ -50,10 +51,10 @@ void analyse()
   graph->SetLineColor(5);
   graph->SetLineWidth(4);
   graph->SetFillColor(0);
-  graph->GetXaxis()->SetRangeUser(1000, 15000);
+  graph->GetXaxis()->SetRangeUser(6750, 7750);
 
-  graph->Fit("f", "R");
-  TF1 *fitFunc = graph->GetFunction("f");
+  graph->Fit("pol5", "C", "SAME", 6500, 8000);
+  TF1 *fitFunc = graph->GetFunction("pol5");
 
   fitFunc->GetChisquare(); 
   fitFunc->GetNDF(); 
