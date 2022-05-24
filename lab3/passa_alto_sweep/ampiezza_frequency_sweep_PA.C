@@ -14,20 +14,20 @@
 #include <math.h>
 
 Double_t computeYerr()
-{
-    const int n = 572;
-    double yerr;
+{   
     TGraph *graph = new TGraph("frequenza_PA_sweep_1k-20k.txt", "%lg %lg %*lg");
-    for (int i = 0; i < n; ++i) {
-        if (graph->GetPointX(i) < 7200) {
-            yerr = (3 * 1.7E-3/(2.49501 - 1.23303E-5 * graph->GetPointX(i)));
-        } else {
-            yerr = (3 * 1.7E-3/(2.45428 - 6.50081E-6 * graph->GetPointX(i)));
-        }
-    return yerr;
-    //per controllare che gli errori abbiano senso (già fatto)
-    //std::cout << yerr << '\n';
+    const int n = 572;
+    Double_t yerr;
+    for (int i = 0; i < n; ++i){
+    if (graph->GetPointX(i) < 7200){
+      Double_t hpa = graph->GetPointY(i)/(2.49501 - 1.23303E-5 * graph->GetPointX(i));
+      yerr = (1.7E-3/(2.49501 - 1.23303E-5 * graph->GetPointX(i)) + 1.7E-3/graph->GetPointY(i)) * hpa;
+    } else {
+      Double_t hpa = graph->GetPointY(i)/(2.45428 - 6.50081E-6 * graph->GetPointX(i));
+      yerr = (1.7E-3/(2.45428 - 6.50081E-6 * graph->GetPointX(i))+ 1.7E-3/graph->GetPointY(i)) * hpa;
     }
+  }
+  return yerr; 
 }
 
 void analyse()

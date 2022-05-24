@@ -16,12 +16,15 @@
 Double_t computeYerr()
 {
   TGraph *graph = new TGraph("frequenza_PB_sweep_1k-30k.txt", "%lg %lg %*lg");  
+  int n = 557;
   Double_t yerr;
-  for (int i = 0; i < 557; ++i){
+  for (int i = 0; i < n; ++i){
     if (graph->GetPointX(i) < 7200){
-      yerr = 1.7E-3/(2.49501 - 1.23303E-5 * graph->GetPointX(i));
+      Double_t hpb = graph->GetPointY(i)/(2.49501 - 1.23303E-5 * graph->GetPointX(i));
+      yerr = (1.7E-3/(2.49501 - 1.23303E-5 * graph->GetPointX(i)) + 1.7E-3/graph->GetPointY(i)) * hpb;
     } else {
-      yerr = 1.7E-3/(2.45428 - 6.50081E-6 * graph->GetPointX(i));
+      Double_t hpb = graph->GetPointY(i)/(2.45428 - 6.50081E-6 * graph->GetPointX(i));
+      yerr = (1.7E-3/(2.45428 - 6.50081E-6 * graph->GetPointX(i))+ 1.7E-3/graph->GetPointY(i)) * hpb;
     }
   }
   return yerr;  

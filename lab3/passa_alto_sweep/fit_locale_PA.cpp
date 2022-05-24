@@ -13,23 +13,25 @@
 #include <iostream>
 #include <math.h>
 
-
 void analyse()
 {
   TF1 *f = new TF1("f", "[0] + [1] * x", 7000, 7100);
 
   TH1F *h = new TH1F("h", "H_pa", 180 , 6800, 7700);
-  Double_t p0 = 59.168;
-  Double_t p1 = -0.0404675;
-  Double_t p2 = 1.11004E-05;
-  Double_t p3 = -1.51896E-09;
-  Double_t p4 = 1.03759E-13;
-  Double_t p5 = -2.83069E-18;
+ 
+  double p[6] = {42.6779, -0.0290747, 7.95567e-06, -1.08546e-09, 7.39158e-14, -2.00986e-18};
+  double dhpa[3] = {0.0019426262, 0.0019362054, 0.0019296780};  
   for (int i = 0; i < 180; ++i){
       Double_t x = h->GetBinCenter(i);
-      h->SetBinError(i, 1.7E-3/(2.49501 - 1.23303E-5 * x));
-      Double_t hpa = p0 + p1 * x + p2 * pow (x, 2.) + p3 * pow (x, 3.) + p4 * pow (x, 4.) + p5 * pow (x, 5.); 
+      Double_t hpa = p[0] + p[1] * x + p[2] * pow (x, 2.) + p[3] * pow (x, 3.) + p[4] * pow (x, 4.) + p[5] * pow (x, 5.); 
       h->SetBinContent(i, hpa);
+      if (x <= 7025){
+        h->SetBinError(i, dhpa[0]);
+      } else if (7125 < x && x <= 7075) {
+        h->SetBinError(i, dhpa[1]); 
+        } else {
+        h->SetBinError(i, dhpa[2]);   
+        } 
   }
 
   
@@ -44,7 +46,8 @@ void analyse()
   fitFunc->GetParError(1);  
  
   for (int i = 0; i < 2; ++i){
-      std::cout << fitFunc->GetParameter(i) << " +/- " << fitFunc->GetParError(i) << '\n';
+      std::cout << "p" << i << " = " <<
+      fitFunc->GetParameter(i) << " +/- " << fitFunc->GetParError(i) << '\n';
   }
   std::cout << "ChiQuadro ridotto: " << fitFunc->GetChisquare() / fitFunc->GetNDF() << '\n';  
  
