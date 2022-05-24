@@ -13,61 +13,41 @@
 #include <iostream>
 #include <math.h>
 
-Double_t computeYerr()
-{
-    const int n = 572;
-    double yerr;
-    TGraph *graph = new TGraph("frequenza_PA_sweep_1k-20k.txt", "%lg %lg %*lg");
-    for (int i = 0; i < n; ++i) {
-        if (graph->GetPointX(i) < 7200) {
-            yerr = (3 * 1.7E-3/(2.49501 - 1.23303E-5 * graph->GetPointX(i)));
-        } else {
-            yerr = (3 * 1.7E-3/(2.45428 - 6.50081E-6 * graph->GetPointX(i)));
-        }
-    return yerr;
-    //per controllare che gli errori abbiano senso (già fatto)
-    //std::cout << yerr << '\n';
-    }
-}
 
 void analyse()
 {
   TF1 *f = new TF1("f", "[0] + [1] * x", 7000, 7100);
-  //f->SetParameter(0, 2.20 * 1E-5);
 
-  TGraphErrors *graph = new TGraphErrors("frequenza_PA_sweep_1k-20k.txt", "%lg %lg %*lg");
-  graph->SetTitle("Fit Locale H_pa; frequenza (Hz); H_pa");
-  for (int i = 0; i < 572; ++i) {
-        if (graph->GetPointX(i) < 7200) {
-            Double_t y = graph->GetPointY(i);
-            graph->SetPointY(i, y/(2.49501 - 1.23303E-5 * graph->GetPointX(i)));
-            graph->SetPointError(i, 0, computeYerr());
-        } else {
-            Double_t y = graph->GetPointY(i);
-            graph->SetPointY(i, y/(2.45428 - 6.50081E-6 * graph->GetPointX(i)));
-            graph->SetPointError(i, 0, computeYerr());
-        }
-    }
-
-    graph->SetLineColor(5);
-    graph->SetLineWidth(4);
-    graph->SetFillColor(0);
-    graph->GetXaxis()->SetRangeUser(6980, 7120);
-    graph->GetYaxis()->SetRangeUser(0.35, 0.37);
+  TH1F *h = new TH1F("h", "H_pa", 180 , 6800, 7700);
+  Double_t p0 = 59.168;
+  Double_t p1 = -0.0404675;
+  Double_t p2 = 1.11004E-05;
+  Double_t p3 = -1.51896E-09;
+  Double_t p4 = 1.03759E-13;
+  Double_t p5 = -2.83069E-18;
+  for (int i = 0; i < 180; ++i){
+      Double_t x = h->GetBinCenter(i);
+      h->SetBinError(i, 1.7E-3/(2.49501 - 1.23303E-5 * x));
+      Double_t hpa = p0 + p1 * x + p2 * pow (x, 2.) + p3 * pow (x, 3.) + p4 * pow (x, 4.) + p5 * pow (x, 5.); 
+      h->SetBinContent(i, hpa);
+  }
 
   
-    graph->Fit("f", "R");
-    TF1 *fitFunc = graph->GetFunction("f");
+  h->Fit("f", "R");
+  TF1 *fitFunc = h->GetFunction("f");
   
-    fitFunc->GetChisquare(); 
-    fitFunc->GetNDF(); 
-    fitFunc->GetParameter(0); 
-    fitFunc->GetParError(0);
-    fitFunc->GetParameter(1); 
-    fitFunc->GetParError(1);
-
-    std::cout << "ChiQuadro ridotto: " << fitFunc->GetChisquare() / fitFunc->GetNDF() << '\n';
-
-    TCanvas *c = new TCanvas("c");
-    graph->Draw("AC");
+  fitFunc->GetChisquare(); 
+  fitFunc->GetNDF(); 
+  fitFunc->GetParameter(0); 
+  fitFunc->GetParError(0);
+  fitFunc->GetParameter(1); 
+  fitFunc->GetParError(1);  
+ 
+  for (int i = 0; i < 2; ++i){
+      std::cout << fitFunc->GetParameter(i) << " +/- " << fitFunc->GetParError(i) << '\n';
+  }
+  std::cout << "ChiQuadro ridotto: " << fitFunc->GetChisquare() / fitFunc->GetNDF() << '\n';  
+ 
+  TCanvas *c = new TCanvas("c");
+  h->Draw();
 }
