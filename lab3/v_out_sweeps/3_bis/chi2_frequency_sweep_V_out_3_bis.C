@@ -25,10 +25,13 @@ Double_t computeYerr()
     double yerr;
     TGraph *graph = new TGraph("frequenza_V_out_1k-30k_3_bis.txt", "%lg %lg %*lg");
     for (int i = 0; i < n; ++i) {
+        double k = 1;//fattore di copertura
+        double x = graph->GetPointX(i);
+        double y = graph->GetPointY(i);
         if (graph->GetPointX(i) < 7200) {
-            yerr = (3 * 1.7E-3/(2.49501 - 1.23303E-5 * graph->GetPointX(i)));
+            yerr = k * (1.7E-3/(2.49501 - 1.23303E-5 * x) + 1.7E-3/y) * y/(2.49501 - 1.23303E-5 * x);
         } else {
-            yerr = (3 * 1.7E-3/(2.45428 - 6.50081E-6 * graph->GetPointX(i)));
+            yerr = k * (1.7E-3/(2.45428 - 6.50081E-6 * x) + 1.7E-3/y) * y/(2.45428 - 6.50081E-6 * x);
         }
     return yerr;
     //per controllare che gli errori abbiano senso (già fatto)
@@ -58,7 +61,7 @@ void computeChisquare()
     graph->SetLineWidth(4);
     graph->SetFillColor(0);
   
-    graph->Fit("f", "R");
+    graph->Fit("f", "R", "EX");
     TF1 *fitFunc = graph->GetFunction("f");
   
     fitFunc->GetChisquare(); 

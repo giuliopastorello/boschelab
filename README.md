@@ -45,3 +45,10 @@ ChiQuadro ridotto: 3.104e-08
 w = 7049.55  +/-  4229.68  
 dv/v = 0.424243
 du/u = 0.424274 
+
+## ampiezza Vout
+
+ChiQuadro ridotto: 19.5079 con k = 1   
+ChiQuadro ridotto: 2.16755 con k = 3   
+Tau misurato: 2.21249e-05 +/- 3.18416e-09   
+Intercetta misurata: -0.00287052 +/- 6.92638e-05   

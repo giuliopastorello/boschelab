@@ -19,12 +19,14 @@ Double_t computeYerr()
     const int n = 572;
     Double_t yerr;
     for (int i = 0; i < n; ++i){
+      Double_t x = graph->GetPointX(i);
+      Double_t y = graph->GetPointY(i);
     if (graph->GetPointX(i) < 7200){
-      Double_t hpa = graph->GetPointY(i)/(2.49501 - 1.23303E-5 * graph->GetPointX(i));
-      yerr = (1.7E-3/(2.49501 - 1.23303E-5 * graph->GetPointX(i)) + 1.7E-3/graph->GetPointY(i)) * hpa;
+      Double_t hpa = y/(2.49501 - 1.23303E-5 * x);
+      yerr = (1.7E-3/(2.49501 - 1.23303E-5 * x) + 1.7E-3/ y) * hpa;
     } else {
-      Double_t hpa = graph->GetPointY(i)/(2.45428 - 6.50081E-6 * graph->GetPointX(i));
-      yerr = (1.7E-3/(2.45428 - 6.50081E-6 * graph->GetPointX(i))+ 1.7E-3/graph->GetPointY(i)) * hpa;
+      Double_t hpa = y/(2.45428 - 6.50081E-6 * x);
+      yerr = (1.7E-3/(2.45428 - 6.50081E-6 * x)+ 1.7E-3/ y) * hpa;
     }
   }
   return yerr; 
