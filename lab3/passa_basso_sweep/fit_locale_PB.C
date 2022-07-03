@@ -17,7 +17,7 @@
 void analyse()
 {
   TGraph *graph = new TGraph("frequenza_PB_sweep_1k-30k.txt", "%lg %lg %*lg");
-  TF1 *f = new TF1("f", "[0] + [1] * x", 7000, 7100);
+  TF1 *f = new TF1("f", "[0] + [1] * x", 6800, 7700);
 
   TH1F *h = new TH1F("h", "H_pa", 180 , 6800, 7700);
   
